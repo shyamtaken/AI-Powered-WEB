@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Sign-In</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+        }
+
+        .container {
+            text-align: center;
+            background: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* Styling the Google button container */
+        .g_id_signin {
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .user-info {
+            margin-top: 30px;
+            text-align: left;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+
+        .user-info h3 {
+            margin-top: 0;
+            color: #555;
+        }
+
+        .user-info p {
+            margin: 5px 0;
+            color: #777;
+        }
+
+        .user-info img {
+            border-radius: 50%;
+            margin-right: 15px;
+            vertical-align: middle;
+        }
+
+        .logout-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sign In with Google</h1>
+
+        <div id="g_id_onload"
+             data-client_id="9091413873-p3mvghqnk4moquhne27krg5q4ouku9mk.apps.googleusercontent.com"
+             data-callback="handleCredentialResponse">
+        </div>
+
+        <div class="g_id_signin"
+             data-type="standard"
+             data-size="large"
+             data-theme="outline"
+             data-text="sign_in_with"
+             data-shape="rectangular"
+             data-logo_alignment="left">
+        </div>
+
+        <div id="user-info" class="user-info" style="display: none;">
+            <h3>Welcome, <span id="user-name"></span>!</h3>
+            <img id="user-photo" src="" alt="User Photo" width="50" height="50">
+            <p><strong>Email:</strong> <span id="user-email"></span></p>
+            <button class="logout-button" onclick="signOut()">Sign Out</button>
+        </div>
+    </div>
+
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script>
+        // This function is called when the user signs in.
+        function handleCredentialResponse(response) {
+            // Decode the JWT token to get the user's information.
+            const decodedToken = jwtDecode(response.credential);
+            
+            // Get user information from the decoded token
+            const { name, email, picture } = decodedToken;
+
+            // Display the user's information on the page.
+            document.getElementById('user-name').innerText = name;
+            document.getElementById('user-email').innerText = email;
+            document.getElementById('user-photo').src = picture;
+
+            // Hide the sign-in button and show the user info.
+            document.getElementById('g_id_signin').style.display = 'none';
+            document.getElementById('user-info').style.display = 'block';
+
+            // For a real application, you would send the 'response.credential'
+            // to your backend server for verification and to create a session.
+            console.log("ID Token:", response.credential);
+            console.log("User Information:", decodedToken);
+        }
+
+        // A simple function to simulate signing out.
+        function signOut() {
+            // Hide the user info and show the sign-in button.
+            document.getElementById('user-info').style.display = 'none';
+            document.getElementById('g_id_signin').style.display = 'block';
+            
+            // In a real application, you would also clear the session.
+            console.log("User signed out.");
+        }
+
+        // A simple function to decode the JWT token.
+        // In a real application, you might use a library for this.
+        function jwtDecode(token) {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            return JSON.parse(jsonPayload);
+        }
+    </script>
+</body>
+</html>
