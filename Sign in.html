@@ -14,7 +14,6 @@
             margin: 0;
             background-color: #f0f2f5;
         }
-
         .container {
             text-align: center;
             background: #fff;
@@ -22,41 +21,17 @@
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-
-        h1 {
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        /* Styling the Google button container */
-        .g_id_signin {
-            display: inline-block;
-            margin-top: 20px;
-        }
-
+        h1 { color: #333; margin-bottom: 20px; }
+        .g_id_signin { display: inline-block; margin-top: 20px; }
         .user-info {
             margin-top: 30px;
             text-align: left;
             border-top: 1px solid #eee;
             padding-top: 20px;
         }
-
-        .user-info h3 {
-            margin-top: 0;
-            color: #555;
-        }
-
-        .user-info p {
-            margin: 5px 0;
-            color: #777;
-        }
-
-        .user-info img {
-            border-radius: 50%;
-            margin-right: 15px;
-            vertical-align: middle;
-        }
-
+        .user-info h3 { margin-top: 0; color: #555; }
+        .user-info p { margin: 5px 0; color: #777; }
+        .user-info img { border-radius: 50%; margin-right: 15px; vertical-align: middle; }
         .logout-button {
             margin-top: 20px;
             padding: 10px 20px;
@@ -97,41 +72,34 @@
 
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script>
-        // This function is called when the user signs in.
         function handleCredentialResponse(response) {
-            // Decode the JWT token to get the user's information.
             const decodedToken = jwtDecode(response.credential);
-            
-            // Get user information from the decoded token
             const { name, email, picture } = decodedToken;
 
-            // Display the user's information on the page.
             document.getElementById('user-name').innerText = name;
             document.getElementById('user-email').innerText = email;
             document.getElementById('user-photo').src = picture;
 
-            // Hide the sign-in button and show the user info.
             document.getElementById('g_id_signin').style.display = 'none';
             document.getElementById('user-info').style.display = 'block';
 
-            // For a real application, you would send the 'response.credential'
-            // to your backend server for verification and to create a session.
             console.log("ID Token:", response.credential);
             console.log("User Information:", decodedToken);
+
+            // Redirect to Get name.html with user data
+            const params = new URLSearchParams({
+                name: name,
+                email: email
+            });
+            window.location.href = `Get name.html?${params.toString()}`;
         }
 
-        // A simple function to simulate signing out.
         function signOut() {
-            // Hide the user info and show the sign-in button.
             document.getElementById('user-info').style.display = 'none';
             document.getElementById('g_id_signin').style.display = 'block';
-            
-            // In a real application, you would also clear the session.
             console.log("User signed out.");
         }
 
-        // A simple function to decode the JWT token.
-        // In a real application, you might use a library for this.
         function jwtDecode(token) {
             const base64Url = token.split('.')[1];
             const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
