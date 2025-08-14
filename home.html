@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Website</title>
+  <link rel="stylesheet" href="home.css">
+  <style>
+    /* Extra style for overlay effect */
+    #overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.25);
+      z-index: 9;
+      display: none;
+    }
+    .side-menu.open {
+      left: 0 !important;
+      box-shadow: 2px 0 16px rgba(0,0,0,0.08);
+    }
+  </style>
+</head>
+<body>
+  <div id="overlay"></div>
+  <header>
+    <nav class="navbar" style="justify-content: flex-start;">
+      <button id="menuBtn" class="hamburger" style="margin-right:1rem;">☰</button>
+      <div class="logo">MySite</div>
+      <div style="flex:1"></div>
+      <button id="themeToggle">🌙</button>
+    </nav>
+  </header>
+
+  <div id="sideMenu" class="side-menu">
+    <a href="#">Home</a>
+    <a href="#">About</a>
+    <a href="#">Services</a>
+    <a href="#">Contact</a>
+  </div>
+
+  <main>
+    <section class="hero">
+      <h1>Welcome to My Official Website</h1>
+      <p>Fast, modern, and compact</p>
+      <button class="cta-btn">Get Started</button>
+    </section>
+    <section class="features">
+      <div class="card">
+        <h3>⚡ Fast</h3>
+        <p>Lightweight and responsive.</p>
+      </div>
+      <div class="card">
+        <h3>🔒 Secure</h3>
+        <p>HTTPS and data safety.</p>
+      </div>
+      <div class="card">
+        <h3>📱 Mobile-Ready</h3>
+        <p>Fully responsive design.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 MySite. All rights reserved.</p>
+  </footer>
+
+  <script src="home.js"></script>
+</body>
+</html>
