@@ -50,7 +50,7 @@
   button {
     width: 100%;
     padding: 0.75rem 1rem;
-    font-size: 1.1rem;
+    font-size: 1.1rem
     background: linear-gradient(90deg, #0078fe 0%, #00c6fb 100%);
     color: #fff;
     border: none;
@@ -82,15 +82,23 @@
 </div>
 
 <script>
-function goToHome() {
-  const name = document.getElementById('nameInput').value.trim();
-  if (name) {
-    localStorage.setItem('username', name);
-    window.location.href = 'home.html';
-  } else {
-    alert('Please enter a valid name.');
+  // Check if name already exists in localStorage
+  window.onload = function() {
+    const savedName = localStorage.getItem('username');
+    if (savedName && savedName.trim() !== "") {
+      window.location.href = 'home.html';
+    }
+  };
+
+  function goToHome() {
+    const name = document.getElementById('nameInput').value.trim();
+    if (name) {
+      localStorage.setItem('username', name);
+      window.location.href = 'home.html';
+    } else {
+      alert('Please enter a valid name.');
+    }
   }
-}
 </script>
 
 </body>
