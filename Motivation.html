@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Daily Motivational Quote</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background: #f0f8ff;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    #quote {
+      font-size: 1.5em;
+      color: #333;
+      max-width: 600px;
+      line-height: 1.4;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <!-- Fixed Scrollable Sidebar -->
+<div style="
+  width: 1000vh;
+  height: 100px;
+  position: fixed;
+  top: 1000;
+  background-color: #f0f0f0;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  overflow-y: auto;
+">
+  <h1>More</h1>
+  <h1><a href="https://shyamtaken.github.io/my-website/about.html">About</a></h1><br>
+  <h1><a href="https://shyamtaken.github.io/my-website/index.html">Home</a></h1>
+  <h1><a href="https://shyamtaken.github.io/my-website/Reply.html">Reply</a></h1>
+  <h1><a href="https://shyamtaken.github.io/my-website/DAVbooks.html">DAV Books</a></h1>
+  <h1><a href="https://shyamtaken.github.io/my-website/DavQA.html">DAV Q/A</a></h1>
+  <h1><a href="https://shyamtaken.github.io/my-website/Pomodoro%20Timer.html">Pomodoro Timer</a></h1>
+  <h1><a href="https://shyamtaken.github.io/my-website/Motivation.html">Motivation</a></h1>
+  <h1><a href="">Contact</a></h1>
+</div>
+<!-- Main Content -->
+ <div style="margin-left: 120px; padding: 20px;">
+  <div id="quote">Loading...</div>
+
+  <script>
+    const quotes = [
+      "Believe you can and you're halfway there.",
+      "The only way to do great work is to love what you do.",
+      "You are stronger than you think.",
+      "Dream big and dare to fail.",
+      "Act as if what you do makes a difference. It does.",
+      "Success is not final, failure is not fatal: It is the courage to continue that counts.",
+      "The harder you work for something, the greater you'll feel when you achieve it.",
+      "Don't watch the clock; do what it does. Keep going.",
+      "Keep your face always toward the sunshine—and shadows will fall behind you.",
+      "Doubt kills more dreams than failure ever will.",
+      "The future depends on what you do today.",
+      "Everything you can imagine is real.",
+      "Start where you are. Use what you have. Do what you can.",
+      "Small steps every day.",
+      "You are capable of amazing things.",
+      "If you can dream it, you can do it.",
+      "Stay positive. Work hard. Make it happen.",
+      "Push yourself, because no one else is going to do it for you.",
+      "Your only limit is your mind.",
+      "Don't stop until you're proud.",
+      "Great things never come from comfort zones.",
+      "Make today so awesome yesterday gets jealous.",
+      "Difficult roads often lead to beautiful destinations.",
+      "Work hard in silence, let success make the noise.",
+      "Your potential is endless.",
+      "Believe in yourself and all that you are.",
+      "Turn your wounds into wisdom.",
+      "Do something today that your future self will thank you for.",
+      "You don’t have to be perfect to be amazing.",
+      "Be fearless in the pursuit of what sets your soul on fire.",
+      "Progress, not perfection.",
+      "Strive for progress, not perfection.",
+      "Take the risk or lose the chance.",
+      "The best view comes after the hardest climb.",
+      "You didn’t come this far to only come this far.",
+      "Discipline is choosing between what you want now and what you want most.",
+      "Stay humble. Work hard. Be kind.",
+      "Your life is your message to the world. Make it inspiring.",
+      "Success doesn’t just find you. You have to go out and get it.",
+      "Wake up with determination. Go to bed with satisfaction.",
+      "Doubt whom you will, but never yourself.",
+      "If it doesn’t challenge you, it won’t change you.",
+      "Be stronger than your excuses.",
+      "Focus on your goal. Don’t look in any direction but ahead.",
+      "Don’t limit your challenges. Challenge your limits.",
+      "Push harder than yesterday if you want a different tomorrow.",
+      "Never give up on something you really want.",
+      "Stay positive even when it feels like your whole world is falling apart.",
+      "Every accomplishment starts with the decision to try.",
+      "You are the artist of your own life. Don’t hand the paintbrush to anyone else.",
+      "Don’t be afraid to give up the good to go for the great.",
+      "Go the extra mile. It’s never crowded there.",
+      "Stop wishing. Start doing.",
+      "Do it with passion or not at all.",
+      "Be so good they can’t ignore you.",
+      "You don’t have to see the whole staircase, just take the first step.",
+      "You get what you work for, not what you wish for.",
+      "Difficult doesn’t mean impossible.",
+      "Focus on the step in front of you, not the whole staircase.",
+      "One day or day one. You decide.",
+      "Stay strong. Stand up. Have a voice.",
+      "Success is what happens after you have survived all your mistakes.",
+      "A little progress each day adds up to big results.",
+      "Don’t quit. Suffer now and live the rest of your life as a champion.",
+      "You are never too old to set another goal or to dream a new dream.",
+      "Make it happen. Shock everyone.",
+      "Keep going. Each step may get harder, but don’t stop.",
+      "Be a warrior, not a worrier.",
+      "Nothing will work unless you do.",
+      "Your dreams don’t work unless you do.",
+      "If opportunity doesn’t knock, build a door.",
+      "You are enough just as you are.",
+      "Be the energy you want to attract.",
+      "Stay patient and trust your journey.",
+      "Be yourself. Everyone else is already taken.",
+      "Work for it more than you hope for it.",
+      "Stars can’t shine without darkness.",
+      "Your vibe attracts your tribe.",
+      "You can and you will.",
+      "Hard times don’t create heroes. It is during the hard times when the hero within us is revealed.",
+      "The struggle you’re in today is developing the strength you need for tomorrow.",
+      "Create the life you can’t wait to wake up to.",
+      "Always do your best. What you plant now, you will harvest later.",
+      "Work until you no longer have to introduce yourself.",
+      "There are no limits to what you can accomplish, except the limits you place on your own thinking.",
+      "Be the change you wish to see in the world.",
+      "You are braver than you believe, stronger than you seem, and smarter than you think.",
+      "The best time for new beginnings is now.",
+      "Success is the sum of small efforts, repeated day-in and day-out.",
+      "Don’t tell people your plans. Show them your results.",
+      "Nothing worth having comes easy.",
+      "The pain you feel today will be the strength you feel tomorrow.",
+      "Stay positive, work hard, make it happen.",
+      "When you feel like quitting, remember why you started.",
+      "Your mindset determines your success.",
+      "One small positive thought can change your whole day.",
+      "Stop doubting yourself, work hard, and make it happen."
+    ];
+
+    const today = new Date();
+    const startDate = new Date(2025, 0, 1); // Jan 1, 2025
+    const diffDays = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
+    const index = diffDays % quotes.length;
+
+    document.getElementById("quote").textContent = quotes[index];
+  </script>
+</body>
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Pomodoro Timer with Tasks & White Noise</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background: #f0f0f0;
+    margin: 0;
+    padding: 0;
+  }
+  h1 {
+    margin-top: 20px;
+  }
+  #timer {
+    font-size: 48px;
+    margin: 20px;
+  }
+  button {
+    font-size: 16px;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+  }
+  #session {
+    font-size: 20px;
+    margin-top: 10px;
+  }
+  .settings, .tasks, .noise-control {
+    margin: 20px auto;
+    padding: 10px;
+    background: #fff;
+    display: inline-block;
+    border-radius: 8px;
+    text-align: left;
+  }
+  .settings label {
+    margin-right: 5px;
+  }
+  .settings input {
+    width: 50px;
+    text-align: center;
+  }
+  .tasks input[type="text"] {
+    width: 200px;
+  }
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  ul li {
+    background: #eee;
+    margin: 3px 0;
+    padding: 5px;
+    border-radius: 4px;
+  }
+</style>
+</head>
+<body>
+  <!-- Fixed Scrollable Sidebar -->
+<div style="
+  width: 100px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #f0f0f0;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  overflow-y: auto;
+">
+  <h1>More</h1>
+  <h1><a href="https://shyamtaken.github.io/my-website/about.html">About</a></h1>
+  <h1><a href="https://shyamtaken.github.io/my-website/index.html">Home</a></h1>
+  <h1><a href="https://shyamtaken.github.io/my-website/Reply.html">Reply</a></h1>
+  <h1><a href="https://shyamtaken.github.io/my-website/DAVbooks.html">DAV Books</a></h1>
+  <h1><a href="https://shyamtaken.github.io/my-website/DavQA.html">DAV Q/A</a></h1>
+  <h1><a href="https://shyamtaken.github.io/my-website/Pomodoro%20Timer.html">Pomodoro Timer</a></h1>
+  <h1><a href="https://shyamtaken.github.io/my-website/Motivation.html">Motivation</a></h1>
+  <h1><a href="">Contact</a></h1>
+</div>
+<!-- Main Content -->
+ <div style="margin-left: 120px; padding: 20px;">
+<h1>Customizable Pomodoro Timer</h1>
+
+<div class="settings">
+  <label>Work (min):</label>
+  <input type="number" id="workInput" value="25" min="1" />
+  <label>Short Break:</label>
+  <input type="number" id="shortBreakInput" value="5" min="1" />
+  <label>Long Break:</label>
+  <input type="number" id="longBreakInput" value="15" min="1" />
+  <button onclick="saveSettings()">Save Settings</button>
+</div>
+
+<div id="session">Work Session</div>
+<div id="timer">25:00</div>
+
+<button onclick="startTimer()">Start</button>
+<button onclick="pauseTimer()">Pause</button>
+<button onclick="resetTimer()">Reset</button>
+
+<div class="noise-control">
+  <button onclick="toggleNoise()">Toggle White Noise</button>
+</div>
+
+<div class="tasks">
+  <h3>My Tasks</h3>
+  <input type="text" id="taskInput" placeholder="New Task"/>
+  <button onclick="addTask()">Add</button>
+  <ul id="taskList"></ul>
+</div>
+
+<audio id="whiteNoise" loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+
+<script>
+  // Durations
+  let WORK_TIME = 25 * 60;
+  let SHORT_BREAK = 5 * 60;
+  let LONG_BREAK = 15 * 60;
+  const CYCLES_BEFORE_LONG_BREAK = 4;
+
+  let timeRemaining = WORK_TIME;
+  let timerInterval = null;
+  let cyclesCompleted = 0;
+  let isRunning = false;
+  let currentMode = "work";
+
+  const noise = document.getElementById("whiteNoise");
+
+  function updateDisplay() {
+    const minutes = Math.floor(timeRemaining / 60).toString().padStart(2, '0');
+    const seconds = (timeRemaining % 60).toString().padStart(2, '0');
+    document.getElementById("timer").textContent = `${minutes}:${seconds}`;
+    document.getElementById("session").textContent =
+      currentMode === "work"
+        ? "Work Session"
+        : currentMode === "short_break"
+        ? "Short Break"
+        : "Long Break";
+  }
+
+  function startTimer() {
+    if (isRunning) return;
+    isRunning = true;
+    timerInterval = setInterval(() => {
+      timeRemaining--;
+      updateDisplay();
+      if (timeRemaining <= 0) {
+        clearInterval(timerInterval);
+        isRunning = false;
+        if (currentMode === "work") {
+          cyclesCompleted++;
+          if (cyclesCompleted % CYCLES_BEFORE_LONG_BREAK === 0) {
+            currentMode = "long_break";
+            timeRemaining = LONG_BREAK;
+          } else {
+            currentMode = "short_break";
+            timeRemaining = SHORT_BREAK;
+          }
+        } else {
+          currentMode = "work";
+          timeRemaining = WORK_TIME;
+        }
+        updateDisplay();
+        startTimer();
+      }
+    }, 1000);
+  }
+
+  function pauseTimer() {
+    clearInterval(timerInterval);
+    isRunning = false;
+  }
+
+  function resetTimer() {
+    clearInterval(timerInterval);
+    isRunning = false;
+    cyclesCompleted = 0;
+    currentMode = "work";
+    timeRemaining = WORK_TIME;
+    updateDisplay();
+  }
+
+  function saveSettings() {
+    const workMinutes = parseInt(document.getElementById("workInput").value, 10);
+    const shortBreakMinutes = parseInt(document.getElementById("shortBreakInput").value, 10);
+    const longBreakMinutes = parseInt(document.getElementById("longBreakInput").value, 10);
+
+    if (isNaN(workMinutes) || isNaN(shortBreakMinutes) || isNaN(longBreakMinutes)) {
+      alert("Please enter valid numbers.");
+      return;
+    }
+
+    WORK_TIME = workMinutes * 60;
+    SHORT_BREAK = shortBreakMinutes * 60;
+    LONG_BREAK = longBreakMinutes * 60;
+
+    resetTimer();
+  }
+
+  function toggleNoise() {
+    if (noise.paused) {
+      noise.play();
+    } else {
+      noise.pause();
+    }
+  }
+
+  // Task List Functions
+  function loadTasks() {
+    const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+    const list = document.getElementById("taskList");
+    list.innerHTML = "";
+    tasks.forEach((task, index) => {
+      const li = document.createElement("li");
+      li.textContent = task;
+      li.onclick = () => removeTask(index);
+      list.appendChild(li);
+    });
+  }
+
+  function addTask() {
+    const taskInput = document.getElementById("taskInput");
+    const task = taskInput.value.trim();
+    if (task) {
+      const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+      tasks.push(task);
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+      taskInput.value = "";
+      loadTasks();
+    }
+  }
+
+  function removeTask(index) {
+    const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+    tasks.splice(index, 1);
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+    loadTasks();
+  }
+
+  loadTasks();
+  updateDisplay();
+</script>
+</body>
+</html>
