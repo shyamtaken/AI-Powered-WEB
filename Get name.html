@@ -6,45 +6,85 @@
 <title>Enter Your Name</title>
 <style>
   body {
-    font-family: Arial, sans-serif;
-    background: #f7f7f7;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .card {
+    background: #fff;
+    padding: 2.5rem 2rem;
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(60, 100, 180, 0.12), 0 1.5px 6px rgba(60, 100, 180, 0.08);
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    height: 100vh;
-    margin: 0;
+    min-width: 320px;
+    max-width: 90vw;
   }
   h1 {
-    color: #333;
+    color: #2d3a4b;
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
   }
-  input, button {
-    padding: 10px;
-    font-size: 1rem;
-    margin: 5px;
+  input[type="text"] {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 1.1rem;
+    border: 1px solid #dbeafe;
+    border-radius: 8px;
+    margin-bottom: 1.2rem;
+    outline: none;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+  }
+  input[type="text"]:focus {
+    border-color: #0078fe;
+    background: #f0f8ff;
   }
   button {
-    background: #0078fe;
-    color: white;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 1.1rem;
+    background: linear-gradient(90deg, #0078fe 0%, #00c6fb 100%);
+    color: #fff;
     border: none;
+    border-radius: 8px;
     cursor: pointer;
+    font-weight: 500;
+    box-shadow: 0 2px 8px rgba(0,120,254,0.08);
+    transition: background 0.2s, transform 0.1s;
   }
   button:hover {
-    background: #005ec4;
+    background: linear-gradient(90deg, #005ec4 0%, #0096c7 100%);
+    transform: translateY(-2px) scale(1.03);
+  }
+  .footer {
+    margin-top: 1.5rem;
+    font-size: 0.95rem;
+    color: #7b8ca7;
+    text-align: center;
   }
 </style>
 </head>
 <body>
 
-<h1>What is your name?</h1>
-<input type="text" id="nameInput" placeholder="Enter your name">
-<button onclick="goToHome()">Submit</button>
+<div class="card">
+  <h1>What is your name?</h1>
+  <input type="text" id="nameInput" placeholder="Enter your name">
+  <button onclick="goToHome()">Submit</button>
+  <div class="footer">Your name will be used to personalize your experience.</div>
+</div>
 
 <script>
 function goToHome() {
   const name = document.getElementById('nameInput').value.trim();
   if (name) {
-    // Optionally store the name for later use
     localStorage.setItem('username', name);
     window.location.href = 'home.html';
   } else {

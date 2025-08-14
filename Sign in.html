@@ -1,10 +1,353 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Google Sign-In</title>
     <style>
+        #AII .highlight {
+  background-color: yellow;
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+#AII .highlighted {
+  background: #ffe066;
+  color: #222;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+#AII body {
+  margin: 0;
+  font-family: 'Segoe UI', 'Inter', Arial, sans-serif;
+  background: linear-gradient(135deg, #e3f0ff 0%, #f5f5f5 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+#AII .container {
+  width: 100%;
+  max-width: 540px;
+  height: 95vh;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.14);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid #e6eaf0;
+}
+
+#AII h1 {
+  text-align: center;
+  margin: 0;
+  padding: 18px 0 10px 0;
+  background: #0084ff;
+  color: #fff;
+  font-size: 1.25rem;
+  letter-spacing: 0.5px;
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+#AII .chat-box {
+  flex: 1;
+  padding: 18px 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: white;
+}
+
+#AII .message-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+#AII .message-wrapper.user {
+  align-items: flex-end;
+}
+
+#AII .chat-message {
+  background: #f0f4fa;
+  padding: 12px 16px;
+  margin: 2px 0;
+  border-radius: 12px;
+  max-width: 80%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+
+#AII .user {
+  align-self: flex-end;
+  background: linear-gradient(90deg, #0084ff 80%, #4fc3f7 100%);
+  color: #fff;
+  border-bottom-right-radius: 6px;
+  border-top-right-radius: 12px;
+}
+
+#AII .bot {
+  align-self: flex-start;
+  background: white;
+  color: #222;
+  border-bottom-left-radius: 6px;
+  border-top-left-radius: 12px;
+}
+
+#AII .feedback-buttons {
+  margin-top: 2px;
+  margin-left: 6px;
+  display: flex;
+  gap: 2px;
+}
+
+#AII .feedback-buttons button {
+  margin-right: 2px;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  font-size: 17px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  transition: background 0.15s, transform 0.18s;
+  color: #888;
+}
+
+#AII .feedback-buttons button.selected {
+  color: #0084ff;
+  background: #e3f0ff;
+  transform: scale(1.15);
+}
+
+#AII .feedback-buttons button:hover {
+  background: #e3f0ff;
+  color: #0071e3;
+}
+
+#AII form {
+  display: flex;
+  padding: 14px 16px;
+  border-top: 1px solid #e6eaf0;
+  background: #fff;
+  gap: 8px;
+}
+
+#AII input[type="text"] {
+  flex: 1;
+  padding: 12px 16px;
+  font-size: 1.08em;
+  border: 1px solid #cfd8dc;
+  border-radius: 16px;
+  outline: none;
+  background: #f7f8fa;
+  transition: border 0.2s;
+}
+
+#AII input[type="text"]:focus {
+  border-color: #0084ff;
+  background: #fff;
+}
+
+#AII button {
+  margin-left: 0;
+  padding: 10px 16px;
+  font-size: 17px;
+  background: white;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  transition: background 0.2s, box-shadow 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#AII button:hover {
+  background: #0071e3;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+#AII @media screen and (max-width: 600px) {
+  .container {
+    height: 100vh;
+    border-radius: 0;
+    max-width: 100vw;
+  }
+  .chat-box {
+    padding: 10px 4px;
+  }
+  form {
+    padding: 8px 4px;
+  }
+}
+
+#AII #micBtn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0078fe, #00c6ff);
+  border: none;
+  color: white;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 4px 12px rgba(0, 120, 254, 0.4);
+}
+
+#AII #micBtn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 16px rgba(0, 120, 254, 0.6);
+}
+
+#AII #micBtn:active {
+  transform: scale(0.96);
+}
+
+#AII #micBtn svg path {
+  transition: fill 0.3s ease;
+  fill: white;
+}
+
+#AII #micBtn::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  width: 120%;
+  height: 120%;
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(0);
+  opacity: 0;
+  pointer-events: none;
+}
+
+#AII #micBtn:active::after {
+  transform: scale(1);
+  opacity: 1;
+  transition: transform 0.3s ease, opacity 0.4s ease;
+}
+
+#AII #micBtn.listening {
+  animation: pulse 1.2s infinite;
+  background: linear-gradient(135deg, #ff4d4d, #ff7676);
+  box-shadow: 0 0 20px rgba(255, 77, 77, 0.7);
+}
+
+#AII @keyframes pulse {
+  0% { box-shadow: 0 0 10px rgba(255, 77, 77, 0.5); }
+  50% { box-shadow: 0 0 20px rgba(255, 77, 77, 0.9); }
+  100% { box-shadow: 0 0 10px rgba(255, 77, 77, 0.5); }
+}
+
+#AII .send-btn {
+  width:48px;
+  height:48px;
+  padding:0;
+  border-radius:12px;
+  border:none;
+  display:inline-grid;
+  place-items:center;
+  background: linear-gradient(180deg,#2081ff 0%,#3fb0ff 100%);
+  box-shadow: 0 10px 22px rgba(33,120,255,0.14), inset 0 -2px 0 rgba(255,255,255,0.12);
+  color:#fff;
+  cursor:pointer;
+  transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+  font-size:18px;
+  position:relative;
+  overflow:hidden;
+}
+
+#AII .send-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(33,120,255,0.18);
+}
+
+#AII .send-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 8px 18px rgba(33,120,255,0.12);
+}
+
+#AII .send-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 6px rgba(63,176,255,0.14);
+}
+
+#AII .send-btn svg {
+  width:20px;
+  height:20px;
+  transform: translateX(0);
+  transition: transform .18s ease;
+}
+
+#AII .send-btn::after {
+  content: "";
+  position: absolute;
+  width: 120%;
+  height: 120%;
+  left: -10%;
+  top: -10%;
+  background: radial-gradient(circle, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0) 40%);
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity .18s ease, transform .18s ease;
+  pointer-events: none;
+}
+
+#AII .send-btn:active::after {
+  opacity:1;
+  transform: scale(1.02);
+  transition: opacity .12s ease, transform .12s ease;
+}
+
+#AII #plusMenu {
+  display: none;
+  position: absolute;
+  min-width: 140px;
+  max-height: 240px;
+  overflow: auto;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.14);
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  transition: transform .14s ease, opacity .14s ease;
+  transform-origin: top left;
+  opacity: 0;
+  z-index: 1000;
+}
+
+#AII #plusMenu.open {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#AII #plusMenu.above {
+  transform-origin: bottom left;
+}
+#Signsign body { font-family: Arial; text-align: center; margin-top: 40px; }
+#Signsign input, button { margin: 5px; padding: 10px; width: 250px; font-size: 14px; }
+#Signsign button { cursor: pointer; background: #1976d2; color: white; border: none; border-radius: 4px; }
+#Signsign h2 { color: #333; }
         body {
             font-family: Arial, sans-serif;
             display: flex;
@@ -14,24 +357,49 @@
             margin: 0;
             background-color: #f0f2f5;
         }
+
         .container {
             text-align: center;
             background: #fff;
             padding: 40px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
-        h1 { color: #333; margin-bottom: 20px; }
-        .g_id_signin { display: inline-block; margin-top: 20px; }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .g_id_signin {
+            display: inline-block;
+            margin-top: 20px;
+        }
+
         .user-info {
             margin-top: 30px;
             text-align: left;
             border-top: 1px solid #eee;
             padding-top: 20px;
         }
-        .user-info h3 { margin-top: 0; color: #555; }
-        .user-info p { margin: 5px 0; color: #777; }
-        .user-info img { border-radius: 50%; margin-right: 15px; vertical-align: middle; }
+
+        .user-info h3 {
+            margin-top: 0;
+            color: #555;
+        }
+
+        .user-info p {
+            margin: 5px 0;
+            color: #777;
+        }
+
+        .user-info img {
+            border-radius: 50%;
+            margin-right: 15px;
+            vertical-align: middle;
+        }
+
         .logout-button {
             margin-top: 20px;
             padding: 10px 20px;
@@ -42,9 +410,92 @@
             background-color: #f44336;
             color: white;
         }
+
+        /* Stylish top-right button */
+        .top-right-btn {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            padding: 10px 18px;
+            font-size: 15px;
+            background: linear-gradient(135deg, #007bff, #00c6ff);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s, background 0.3s;
+        }
+        .top-right-btn:hover {
+            background: linear-gradient(135deg, #0056b3, #0095cc);
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body>
+    <button class="top-right-btn" onclick="window.location.href='https://shyamtaken.github.io/AI-Powered-WEB/Get%20name.html'">
+        Go to Name Page
+    </button>
+    <div id="Signsign">
+<h2>Sign Up</h2>
+<input id="signupEmail" type="email" placeholder="Email">
+<input id="signupPassword" type="password" placeholder="Password">
+<button onclick="signUp()">Sign Up</button>
+
+<h2>Sign In</h2>
+<input id="signinEmail" type="email" placeholder="Email">
+<input id="signinPassword" type="password" placeholder="Password">
+<button onclick="signIn()">Sign In</button>
+
+<h3 id="status">Not signed in</h3>
+<button onclick="signOut()" style="background:#d32f2f">Sign Out</button>
+
+<script>
+// Firebase config from your project
+const firebaseConfig = {
+  apiKey: "AIzaSyDiT7g6wWxJ20qArg1p8fJZ0moPZEq9w1k",
+  authDomain: "sign-in-5fc64.firebaseapp.com",
+  projectId: "sign-in-5fc64",
+  storageBucket: "sign-in-5fc64.appspot.com",
+  messagingSenderId: "1072236098686",
+  appId: "1:1072236098686:web:3a66396492f0d50bb5d42f",
+  measurementId: "G-0PJWCGRHYR"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+
+// Sign Up
+function signUp() {
+  const email = document.getElementById("signupEmail").value;
+  const password = document.getElementById("signupPassword").value;
+  auth.createUserWithEmailAndPassword(email, password)
+    .then(() => alert("Account created successfully"))
+    .catch(err => alert(err.message));
+}
+
+// Sign In
+function signIn() {
+  const email = document.getElementById("signinEmail").value;
+  const password = document.getElementById("signinPassword").value;
+  auth.signInWithEmailAndPassword(email, password)
+    .then(() => window.location.href = "Get name.html") // redirect after sign-in
+    .catch(err => alert(err.message));
+}
+
+// Sign Out
+function signOut() {
+  auth.signOut();
+}
+
+// Auth state change listener
+auth.onAuthStateChanged(user => {
+  document.getElementById("status").innerText = user ? "Signed in: " + user.email : "Not signed in";
+});
+</script>
+</div>
     <div class="container">
         <h1>Sign In with Google</h1>
 
@@ -80,23 +531,16 @@
             document.getElementById('user-email').innerText = email;
             document.getElementById('user-photo').src = picture;
 
-            document.getElementById('g_id_signin').style.display = 'none';
+            document.querySelector('.g_id_signin').style.display = 'none';
             document.getElementById('user-info').style.display = 'block';
 
             console.log("ID Token:", response.credential);
             console.log("User Information:", decodedToken);
-
-            // Redirect to Get name.html with user data
-            const params = new URLSearchParams({
-                name: name,
-                email: email
-            });
-            window.location.href = `Get name.html?${params.toString()}`;
         }
 
         function signOut() {
             document.getElementById('user-info').style.display = 'none';
-            document.getElementById('g_id_signin').style.display = 'block';
+            document.querySelector('.g_id_signin').style.display = 'block';
             console.log("User signed out.");
         }
 
@@ -109,5 +553,167 @@
             return JSON.parse(jsonPayload);
         }
     </script>
+    <!-- ...existing code... -->
+
+<!-- AI Assistant Button -->
+<button id="openAI" style="
+  position: fixed;
+  left: 50%;
+  bottom: 30px;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg,#0078fe,#00c6fb);
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  padding: 14px 32px;
+  font-size: 1.15em;
+  font-weight: 600;
+  box-shadow: 0 4px 16px rgba(0,120,254,0.12);
+  cursor: pointer;
+  z-index: 1000;
+  transition: background 0.2s;
+">Ask AI how to sign</button>
+<div id="AII">
+<!-- AI Assistant Overlay -->
+<div id="aiOverlay" style="
+  position: fixed;
+  left: 0; top: 0;
+  width: 100vw; height: 85vh;
+  background: #fff;
+  box-shadow: 0 8px 32px rgba(60,100,180,0.12);
+  border-radius: 0 0 32px 32px;
+  z-index: 9999;
+  display: none;
+  transition: top 0.3s;
+  overflow: auto;
+">
+  <div id="aiDragBar" style="
+    height: 32px;
+    background: linear-gradient(90deg,#0078fe,#00c6fb);
+    border-radius: 0 0 16px 16px;
+    cursor: grab;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 500;
+    font-size: 1em;
+    letter-spacing: 0.5px;
+    user-select: none;
+  ">
+    <span style="font-size:1.3em;">⬇️ Drag down to close</span>
+  </div>
+  <!-- AI Assistant HTML from ai.html START -->
+  <div id="aiContent">
+    <!-- Paste everything inside <body> from ai.html here, except <body> tags -->
+    <div class="container">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
+        <button id="newChatBtn"
+          style="background: linear-gradient(135deg,black,black);border: none;padding: 10px;border-radius: 50%;box-shadow: 0 4px 10px rgba(0,0,0,0.15);cursor: pointer;transition: transform 0.15s ease, box-shadow 0.15s ease;display: flex;align-items: center;justify-content: center;"
+          onmouseover="this.style.transform='scale(1.1)';this.style.boxShadow='0 6px 14px rgba(0,0,0,0.2)'"
+          onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 4px 10px rgba(0,0,0,0.15)'"
+          title="New Chat"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="white" viewBox="0 0 24 24">
+            <path d="M12 5v14m-7-7h14" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <h1 style="margin: 0;font-family: 'Segoe UI', sans-serif;font-size: 1.8em;font-weight: 700;background: linear-gradient(90deg, black, black);-webkit-background-clip: text;-webkit-text-fill-color: transparent;display: flex;align-items: center;gap: 8px;">
+          <span style="font-size: 1.4em; animation: float 3s ease-in-out infinite;"></span>
+          Shyam GPT
+        </h1>
+        <style>
+
+        @keyframes float {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-3px); }
+        }
+        </style>
+      </div>
+      <div class="chat-box" id="chat-box"></div>
+      <form id="chat-form">
+        <div style="display: flex; align-items: center; background: #f7f7f8; border-radius: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); padding: 8px 16px; gap: 8px;">
+          <div style="position: relative;">
+            <button type="button" id="plusBtn" style="width:36px;height:36px;font-size:22px;border-radius:50%;background:black;border:1px solid black;box-shadow:0 1px 4px rgba(0,0,0,0.06);margin-right:8px;">+</button>
+            <div id="plusMenu" style="display:none;position:absolute;top:40px;left:0;background:#fff;border:1px solid #ccc;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12);z-index:10;min-width:120px;">
+              <div style="display:flex;flex-direction:column;">
+                <button type="button" style="width:100%;border:none;background:none;padding:12px 20px;text-align:left;cursor:pointer;font-size:1em;transition:background 0.2s;border-radius:6px 6px 0 0;" onmouseover="this.style.background='#f0f4fa'" onmouseout="this.style.background='none'" onclick="document.getElementById('screenshotInput').click();">📷 Screenshot</button>
+                <button type="button" style="width:100%;border:none;background:none;padding:12px 20px;text-align:left;cursor:pointer;font-size:1em;transition:background 0.2s;border-radius:0 0 6px 6px;border-top:1px solid #eee;" onmouseover="this.style.background='#f0f4fa'" onmouseout="this.style.background='none'" onclick="openCamera()">📸 Camera</button>
+              </div>
+            </div>
+            <input type="file" id="screenshotInput" accept="image/*" style="display:none;" />
+          </div>
+          <input
+            type="text"
+            id="user-input"
+            placeholder="Ask anything"
+            autocomplete="off"
+            required
+            style="flex:1; font-size:1.1em; padding:12px 16px; border-radius:18px; border:1px solid #ddd; background:#fff; outline:none;"
+          />
+          <button type="button" id="micBtn" title="Speak">
+            <svg width="24" height="24" viewBox="0 0 20 20">
+              <path d="M10 2a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3zm5 9a1 1 0 0 1 2 0c0 3.31-2.69 6-6 6s-6-2.69-6-6a1 1 0 0 1 2 0c0 2.21 1.79 4 4 4s4-1.79 4-4z"/>
+            </svg>
+          </button>
+          <button type="submit" id="sendBtn" style="width:40px;height:40px;border-radius:50%;background:#0078fe;color:#fff;font-size:18px;border:none;box-shadow:0 1px 4px rgba(0,0,0,0.08);margin-left:8px;">➔</button>
+          <button type="button" id="blockBtn" style="width:40px;height:40px;border-radius:50%;background:#ef4444;color:#fff;font-size:18px;border:none;box-shadow:0 1px 4px rgba(0,0,0,0.08);margin-left:8px;display:none;">⛔</button>
+        </div>
+      </form>
+    </div>
+    <script src="signin.js"></script>
+    <script>
+      let uploadedImageFile = null;
+      function openCamera() {
+        alert('Camera capture not implemented yet.');
+        document.getElementById('plusMenu').style.display = 'none';
+      }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  </div>
+  <!-- AI Assistant HTML from ai.html END -->
+</div>
+
+<script>
+const openAI = document.getElementById('openAI');
+const aiOverlay = document.getElementById('aiOverlay');
+const aiDragBar = document.getElementById('aiDragBar');
+let isDragging = false, startY = 0, startTop = 0;
+
+openAI.onclick = () => {
+  aiOverlay.style.display = 'block';
+  aiOverlay.style.top = '0';
+};
+
+aiDragBar.onmousedown = (e) => {
+  isDragging = true;
+  startY = e.clientY;
+  startTop = aiOverlay.offsetTop;
+  aiDragBar.style.cursor = 'grabbing';
+  document.body.style.userSelect = 'none';
+};
+
+document.onmousemove = (e) => {
+  if (!isDragging) return;
+  let newTop = Math.max(0, startTop + (e.clientY - startY));
+  aiOverlay.style.top = newTop + 'px';
+};
+
+document.onmouseup = () => {
+  if (!isDragging) return;
+  isDragging = false;
+  aiDragBar.style.cursor = 'grab';
+  document.body.style.userSelect = '';
+  // If dragged more than half screen, close
+  if (parseInt(aiOverlay.style.top) > window.innerHeight * 0.3) {
+    aiOverlay.style.display = 'none';
+    aiOverlay.style.top = '0';
+  } else {
+    aiOverlay.style.top = '0';
+  }
+};
+</script>
+<!-- ...existing code... -->
+ </div>
 </body>
 </html>
