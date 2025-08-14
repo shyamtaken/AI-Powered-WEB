@@ -1,0 +1,155 @@
+     html {
+  scroll-behavior: smooth;
+}
+
+    body {
+        background-color: #f0f0f0;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;<a href= "#class8">View Books Links</a>
+
+    }
+      .booklinks h2 {
+    font-family: 'Segoe UI', sans-serif;
+    color: #2c3e50;
+  }
+  
+  .booklinks a {
+    display: block;
+    margin: 10px 0;
+    padding: 12px 20px;
+    background: #eaf6ff;
+    color: #007acc;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: 0.3s;
+  }
+  .booklinks a:hover {
+    background: #d0ecff;
+    color: #005a99;
+  }
+    .book-links2 h2 {
+    font-family: 'Segoe UI', sans-serif;
+    color: #2c3e50;
+  }
+  .book-links2 a {
+    display: block;
+    margin: 10px 0;
+    padding: 12px 20px;
+    background: #f0f9f2;
+    color: #2c7a3f;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: 0.3s;
+  }
+  .book-links2 a:hover {
+    background: #d7f3de;
+    color: #1e5730;
+  }
+   .class-section {
+    background: linear-gradient(135deg, #e6f0ff, #ffffff);
+    border: 2px solid #aad;
+    border-radius: 15px;
+    padding: 20px;
+    max-width: 600px;
+    margin: 30px auto;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    font-family: 'Segoe UI', sans-serif;
+  }
+  .rect-link {
+  display: inline-block;
+  background-color: #ffffff;
+  border: 2px solid #3498db;
+  border-radius: 8px;
+  padding: 10px 16px;
+  margin: 8px;
+  color: #3498db;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  text-align: center;
+  transition: 0.3s;
+}
+
+.rect-link:hover {
+  background-color: #3498db;
+  color: white;
+}
+
+.rect-link {
+  display: inline-block;
+  background-color: #ffffff;
+  border: 2px solid #3498db;
+  border-radius: 8px;
+  padding: 12px 20px;
+  margin: 10px;
+  color: #3498db;
+  text-decoration: none;
+  font-weight: 600;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.rect-link:hover {
+  background-color: #3498db;
+  color: white;
+}
+
+  .class-section h2 {
+    text-align: center;
+    color: #003366;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  .book-link {
+    display: block;
+    padding: 10px 15px;
+    margin: 8px 0;
+    text-decoration: none;
+    background: #007bff;
+    color: white;
+    border-radius: 8px;
+    transition: background 0.3s;
+    font-weight: 500;
+  }
+.bubble-link {
+  display: inline-block;
+  background-color: #f2f2f2;
+  color: #333;
+  padding: 10px 16px;
+  margin: 8px;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.3s;
+  border: 1px solid #ccc;
+}
+
+.bubble-link:hover {
+  background-color: #dbeeff;
+  color: #000;
+}
+
+  .book-link:hover {
+    background: #0056b3;
+  }
+     .class-section2 {
+    background: linear-gradient(135deg, #e6f0ff, #ffffff);
+    border: 2px solid #aad;
+    border-radius: 15px;
+    padding: 20px;
+    max-width: 600px;
+    margin: 30px auto;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .class-section2 h2 {
+    text-align: center;
+    color: #003366;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
