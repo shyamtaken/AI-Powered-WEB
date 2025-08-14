@@ -446,7 +446,11 @@
 <h2>Sign In</h2>
 <input id="signinEmail" type="email" placeholder="Email">
 <input id="signinPassword" type="password" placeholder="Password">
+<div class="remember">
+  <input type="checkbox" id="rememberMe"> <label for="rememberMe">Remember Me</label>
+</div>
 <button onclick="signIn()">Sign In</button>
+<a onclick="forgotPassword()">Forgot Password?</a>
 
 <h3 id="status">Not signed in</h3>
 <button onclick="signOut()" style="background:#d32f2f">Sign Out</button>
@@ -480,8 +484,29 @@ function signUp() {
 function signIn() {
   const email = document.getElementById("signinEmail").value;
   const password = document.getElementById("signinPassword").value;
-  auth.signInWithEmailAndPassword(email, password)
-    .then(() => window.location.href = "Get name.html") // redirect after sign-in
+  const rememberMe = document.getElementById("rememberMe").checked;
+
+  const persistence = rememberMe ? firebase.auth.Auth.Persistence.LOCAL : firebase.auth.Auth.Persistence.SESSION;
+  
+  auth.setPersistence(persistence)
+    .then(() => {
+      return auth.signInWithEmailAndPassword(email, password);
+    })
+    .then(() => {
+      window.location.href = "Get name.html"; // redirect after sign-in
+    })
+    .catch(err => alert(err.message));
+}
+
+// Forgot Password
+function forgotPassword() {
+  const email = document.getElementById("signinEmail").value;
+  if (!email) {
+    alert("Please enter your email first.");
+    return;
+  }
+  auth.sendPasswordResetEmail(email)
+    .then(() => alert("Password reset email sent"))
     .catch(err => alert(err.message));
 }
 
@@ -492,10 +517,17 @@ function signOut() {
 
 // Auth state change listener
 auth.onAuthStateChanged(user => {
-  document.getElementById("status").innerText = user ? "Signed in: " + user.email : "Not signed in";
+  if (user) {
+    // Auto redirect if already signed in and on login page
+    if (window.location.pathname.endsWith("Sign%20in.html") || window.location.pathname === "/") {
+      window.location.href = "Get name.html";
+    }
+    document.getElementById("status").innerText = "Signed in: " + user.email;
+  } else {
+    document.getElementById("status").innerText = "Not signed in";
+  }
 });
 </script>
-</div>
     <div class="container">
         <h1>Sign In with Google</h1>
 
