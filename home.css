@@ -128,3 +128,71 @@ footer {
 .side-menu a:hover {
   background: rgba(255,255,255,0.12);
 }
+    /* Extra style for overlay effect */
+    #overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.25);
+      z-index: 9;
+      display: none;
+    }
+    .side-menu.open {
+      left: 0 !important;
+      box-shadow: 2px 0 16px rgba(0,0,0,0.08);
+    }
+    button {
+      background-color: #0078fe;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .dark-mode button {
+      background-color: #222;
+    }
+    .back-btn {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+.back-btn:hover {
+  background: #0056b3;
+}
+/* overlay hidden by default */
+#overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  z-index: 999;
+}
+
+/* side menu hidden off-screen */
+.side-menu {
+  position: fixed;
+  top: 0; left: -250px;
+  width: 250px;
+  height: 100%;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.3);
+  overflow-y: auto;     /* scrollable */
+  transition: left 0.3s ease;
+  z-index: 1000;
+  padding: 10px;
+}
+
+/* visible state */
+.side-menu.open {
+  left: 0;
+}
+
+#overlay.show {
+  display: block;
+}
